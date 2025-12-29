@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fidel Chimwani - Full-Stack Software Engineer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --accent: #3b82f6;
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --glass: rgba(255, 255, 255, 0.1);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            overflow-x: hidden;
+            background: #f9fafb;
+        }
+
+        /* Menu Button */
+        .menu-toggle {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle:hover {
+            background: var(--secondary);
+            transform: scale(1.05);
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+
+        /* Menu Overlay */
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .menu-content {
+            text-align: center;
+        }
+
+        .menu-links {
+            list-style: none;
+            margin-bottom: 3rem;
+        }
+
+        .menu-links li {
+            margin: 1.5rem 0;
+        }
+
+        .menu-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+        }
+
+        .menu-links a:hover {
+            color: var(--primary);
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(10px);
+        }
+
+        .menu-social {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+
+        .menu-social a {
+            color: white;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .menu-social a:hover {
+            color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background: var(--gradient);
+            padding: 2rem 5%;
+        }
+
+        .hero .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            color: white;
+        }
+
+        .hero-content h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero-content .subtitle {
+            font-size: 2rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease 0.2s both;
+            font-weight: 300;
+        }
+
+        .hero-content p {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 3rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            animation: fadeInUp 0.8s ease 0.6s both;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        /* Sections */
+        section {
+            padding: 6rem 5%;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            color: var(--dark);
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-text {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .about-text p {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #4b5563;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 15px;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Skills Section */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-category {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+            border: 1px solid #e5e7eb;
+        }
+
+        .skill-category:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            border-color: var(--primary);
+        }
+
+        .skill-category h3 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .skill-category h3::before {
+            content: "▸";
+            color: var(--primary);
+        }
+
+        .skill-category ul {
+            list-style: none;
+        }
+
+        .skill-category li {
+            padding: 0.8rem 0;
+            color: #555;
+            border-bottom: 1px solid #f1f1f1;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .skill-category li:last-child {
+            border-bottom: none;
+        }
+
+        .skill-category li::before {
+            content: "✓";
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* Projects Section */
+        .projects {
+            background: var(--light);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .project-content {
+            padding: 2.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-card h3 {
+            color: var(--dark);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .project-card p {
+            color: #666;
+            margin-bottom: 2rem;
+            flex-grow: 1;
+            line-height: 1.7;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: auto;
+        }
+
+        .project-links a {
+            padding: 0.8rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .project-links a:hover {
+            background: var(--secondary);
+            transform: translateY(-3px);
+        }
+
+        /* Contact Section */
+        .contact-content {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .contact-content p {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 3rem;
+            line-height: 1.8;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .contact-item {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .contact-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-item i {
+            font-size: 2.5rem;
+            color: var(--primary);
+        }
+
+        .contact-item a {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .contact-item a:hover {
+            color: var(--secondary);
+            text-decoration: underline;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .social-links a {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            text-decoration: none;
+            font-size: 1.5rem;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .social-links a:hover {
+            background: var(--secondary);
+            transform: scale(1.1) translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 3rem;
+        }
+
+        footer p {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .copyright {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.8rem;
+            }
+
+            .hero-content .subtitle {
+                font-size: 1.5rem;
+            }
+
+            .hero-content p {
+                font-size: 1.1rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+                text-align: center;
+            }
+
+            h2 {
+                font-size: 2.2rem;
+            }
+
+            .menu-links a {
+                font-size: 1.5rem;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .menu-toggle {
+                top: 1rem;
+                right: 1rem;
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            section {
+                padding: 4rem 5%;
+            }
+
+            .hero {
+                padding: 1rem 5%;
+            }
+
+            .hero-content h1 {
+                font-size: 2.2rem;
+            }
+
+            .stat-item {
+                padding: 1.5rem;
+            }
+
+            .stat-number {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Menu Toggle Button -->
+    <div class="menu-toggle" id="menuToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <!-- Menu Overlay -->
+    <div class="menu-overlay" id="menuOverlay">
+        <div class="menu-content">
+            <ul class="menu-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="menu-social">
+                <a href="https://github.com/Cajuki" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="mailto:fidelchimwani@gmail.com"><i class="fas fa-envelope"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Fidel Chimwani</h1>
+                <div class="subtitle">Full-Stack Software Engineer</div>
+                <p>Building scalable, production-grade web applications with modern technologies. Specialized in end-to-end system architecture and data-driven solutions.</p>
+                <div class="hero-buttons">
+                    <a href="#projects" class="btn btn-primary">View Projects</a>
+                    <a href="#contact" class="btn btn-secondary">Get In Touch</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <div class="container">
+            <h2>About Me</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>I'm a Senior-Ready Full-Stack Software Engineer based in Nairobi, Kenya, with a passion for building scalable and efficient web applications. I specialize in modern JavaScript frameworks, backend API development, and cloud-native architectures.</p>
+                    <p>With experience in designing end-to-end solutions, I focus on creating systems that are not only functional but also maintainable, secure, and optimized for performance. I thrive in collaborative environments where I can work alongside product managers, designers, and data teams to translate complex requirements into elegant solutions.</p>
+                    <p>Currently pursuing my Bachelor's degree in Software Engineering at Zetech University, I'm constantly learning and staying updated with the latest technologies and best practices in software development.</p>
+                    
+                    <div class="stats">
+                        <div class="stat-item">
+                            <span class="stat-number">3+</span>
+                            <div>Years Experience</div>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">10+</span>
+                            <div>Projects Completed</div>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">15+</span>
+                            <div>Technologies</div>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">100%</div>
+                            <div>Client Satisfaction</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills">
+        <div class="container">
+            <h2>Technical Skills</h2>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3>Front-End</h3>
+                    <ul>
+                        <li>React & Next.js</li>
+                        <li>TypeScript & JavaScript (ES6+)</li>
+                        <li>HTML5 & CSS3</li>
+                        <li>Tailwind CSS</li>
+                    </ul>
+                </div>
+                <div class="skill-category">
+                    <h3>Back-End</h3>
+                    <ul>
+                        <li>Node.js & Express</li>
+                        <li>REST APIs & WebSockets</li>
+                        <li>Python (FastAPI)</li>
+                        <li>PHP</li>
+                    </ul>
+                </div>
+                <div class="skill-category">
+                    <h3>Databases</h3>
+                    <ul>
+                        <li>PostgreSQL & MySQL</li>
+                        <li>DynamoDB</li>
+                        <li>Snowflake</li>
+                        <li>SQL for Analytics</li>
+                    </ul>
+                </div>
+                <div class="skill-category">
+                    <h3>DevOps & Cloud</h3>
+                    <ul>
+                        <li>AWS</li>
+                        <li>Docker & Kubernetes</li>
+                        <li>CI/CD Pipelines</li>
+                        <li>Git & GitHub</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects">
+        <div class="container">
+            <h2>Featured Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-content">
+                        <h3>StepUp Platform</h3>
+                        <p>A comprehensive learning and development platform built with modern web technologies. Features include user authentication, course management, and progress tracking.</p>
+                        <div class="project-links">
+                            <a href="https://stepup-seven.vercel.app/" target="_blank"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-content">
+                        <h3>Tourism Platform</h3>
+                        <p>An interactive tourism website showcasing destinations, booking systems, and user reviews. Built with responsive design and optimized performance.</p>
+                        <div class="project-links">
+                            <a href="https://tourism-dun-gamma.vercel.app/" target="_blank"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-content">
+                        <h3>GariYako Hub</h3>
+                        <p>An automotive platform connecting buyers and sellers. Features real-time updates, secure transactions, and comprehensive vehicle listings.</p>
+                        <div class="project-links">
+                            <a href="https://github.com/Cajuki" target="_blank"><i class="fab fa-github"></i> View Code</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-content">
+                        <h3>Charity Homes Donation Tracker</h3>
+                        <p>A full-stack system for tracking donations and managing charity operations. Includes analytics dashboard and reporting features.</p>
+                        <div class="project-links">
+                            <a href="https://github.com/Cajuki" target="_blank"><i class="fab fa-github"></i> View Code</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-content">
+                        <h3>POS Web Application</h3>
+                        <p>A comprehensive Point of Sale system with inventory management, sales tracking, and reporting capabilities.</p>
+                        <div class="project-links">
+                            <a href="https://github.com/Cajuki" target="_blank"><i class="fab fa-github"></i> View Code</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-content">
+                        <h3>Digital Library Platform</h3>
+                        <p>A mobile-accessible digital library with search functionality, user management, and content delivery systems.</p>
+                        <div class="project-links">
+                            <a href="https://github.com/Cajuki" target="_blank"><i class="fab fa-github"></i> View Code</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <div class="container">
+            <h2>Get In Touch</h2>
+            <div class="contact-content">
+                <p>I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision. Feel free to reach out!</p>
+                
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <a href="mailto:fidelchimwani@gmail.com">fidelchimwani@gmail.com</a>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <a href="tel:+254790080903">+254 790 080 903</a>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>Nairobi, Kenya</div>
+                    </div>
+                </div>
+                
+                <div class="social-links">
+                    <a href="https://github.com/Cajuki" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="mailto:fidelchimwani@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>Fidel Chimwani - Full-Stack Software Engineer</p>
+        <p class="copyright">&copy; 2025 All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Menu Toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const menuOverlay = document.getElementById('menuOverlay');
+        const menuLinks = document.querySelectorAll('.menu-links a');
+
+        menuToggle.addEventListener('click', () => {
+            menuToggle.classList.toggle('active');
+            menuOverlay.classList.toggle('active');
+            document.body.style.overflow = menuOverlay.classList.contains('active') ? 'hidden' : '';
+        });
+
+        // Close menu when clicking on a link
+        menuLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                menuToggle.classList.remove('active');
+                menuOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+
+        // Smooth scrolling for all anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for animations
+        document.querySelectorAll('section, .project-card, .skill-category, .stat-item, .contact-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+
+        // Close menu on ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && menuOverlay.classList.contains('active')) {
+                menuToggle.classList.remove('active');
+                menuOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+    </script>
+</body>
+</html>
